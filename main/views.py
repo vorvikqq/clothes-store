@@ -14,7 +14,7 @@ def popular_list(request):
     Returns:
         HttpResponse: Rendered HTML page with the list of products.
     """
-    products = Product.objects.filter(is_available=True)
+    products = Product.objects.filter(is_available=True)[:3]
 
     return render(request, 'main/index/index.html', {'products': products})
 

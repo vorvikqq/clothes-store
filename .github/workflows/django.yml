@@ -22,19 +22,35 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install Dependencies
+    - name: Install Docker Compose
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        sudo curl -L "https://github.com/docker/compose/releases/download/v2.29.7/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+        docker-compose --version
+
+    - name: Start Docker Compose Services
+      run: |
+        docker-compose up -d
+      env:
+        STRIPE_API_KEY: sk_test_dummy_key_for_ci
+
+    - name: Install Dependencies in Container
+      run: |
+        docker-compose exec -T web pip install -r requirements.txt
 
     - name: Run Migrations
       run: |
-        python manage.py migrate --noinput
+        docker-compose exec -T web python manage.py migrate --noinput
       env:
         DJANGO_SETTINGS_MODULE: clothes_store.settings
 
-    - name: Run Tests
+    - name: Run Tests with Pytest
       run: |
-        pytest
+        docker-compose exec -T web pytest
       env:
         DJANGO_SETTINGS_MODULE: clothes_store.settings
+
+    - name: Stop Docker Compose Services
+      run: |
+        docker-compose down
+      if: always()

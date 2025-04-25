@@ -92,7 +92,7 @@ DATABASES = {
 }
 
 
-if 'test' in sys.argv:
+if 'test' in sys.argv[0]:
 
     DATABASES['default'] = {
         'ENGINE': 'django.db.backends.sqlite3',

@@ -14,6 +14,9 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 import dj_database_url
+import sys
+import pytest
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -87,6 +90,15 @@ DATABASE_URL = 'postgresql://clothes_admin:lGnaasGCGugtp3GjKiiBXuEMRXyJ2J5i@dpg-
 DATABASES = {
     'default': dj_database_url.parse(DATABASE_URL)
 }
+
+
+if 'test' in sys.argv:
+
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': ':memory:',
+    }
+
 
 
 # Password validation

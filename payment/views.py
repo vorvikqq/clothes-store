@@ -11,6 +11,21 @@ stripe.api_version = settings.STRIPE_API_VERSION
 
 
 def payment_process(request):
+    """
+    Handle the Stripe payment session creation and redirect user to Stripe Checkout.
+
+    This view is triggered when the user proceeds to payment. It retrieves the current order
+    from the session, creates a Stripe Checkout session with the order's line items, and
+    redirects the user to the Stripe-hosted payment page.
+
+    GET request only because of the redirection from order_create.
+
+    Args:
+        request (HttpRequest): The HTTP request containing session data.
+
+    Returns:
+        HttpResponseRedirect: Redirects to the Stripe Checkout page.
+    """
     order_id = request.session.get('order_id', None)
     order = get_object_or_404(Order, id=order_id)
 
@@ -45,8 +60,30 @@ def payment_process(request):
 
 
 def payment_completed(request):
+    """
+    Display the payment completed page.
+
+    This view is shown to the user after a successful Stripe payment.
+
+    Args:
+        request (HttpRequest): The HTTP request.
+
+    Returns:
+        HttpResponse: Rendered template for payment success.
+    """
     return render(request, 'payment/completed.html')
 
 
 def payment_canceled(request):
+    """
+    Display the payment canceled page.
+
+    This view is shown to the user if he goes back from and canceles Stripe payment.
+
+    Args:
+        request (HttpRequest): The HTTP request.
+
+    Returns:
+        HttpResponse: Rendered template for payment cancel.
+    """
     return render(request, 'payment/canceled.html')

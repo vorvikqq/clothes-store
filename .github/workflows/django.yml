@@ -50,6 +50,7 @@ jobs:
       env:
         DJANGO_SETTINGS_MODULE: clothes_store.settings
         PYTHONPATH: .
+        CLOUDINARY_URL: cloudinary://158694473719766:iNKT0_6feHbO3Wje4Tiu016JLpk@daadhdpka
 
     - name: Stop Docker Compose Services
       run: |

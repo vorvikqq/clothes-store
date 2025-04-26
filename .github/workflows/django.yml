@@ -49,6 +49,7 @@ jobs:
         docker-compose exec -T web pytest
       env:
         DJANGO_SETTINGS_MODULE: clothes_store.settings
+        PYTHONPATH: .
 
     - name: Stop Docker Compose Services
       run: |

@@ -4,25 +4,27 @@ from main.models import Product, Category
 from django.core.files.uploadedfile import SimpleUploadedFile
 from unittest import mock
 
-# ----- Mocking -----
-mock.patch('cloudinary.uploader.upload', return_value={
-    "public_id": "test_id",
-    "url": "http://example.com/fake.jpg",
-    "secure_url": "https://example.com/fake.jpg",
-    "version": "1234567890",
-    "type": "upload",
-    "resource_type": "image",
-    "signature": "fake_signature",
-    "format": "jpg",
-    "created_at": "2020-01-01T00:00:00Z",
-    "bytes": 12345,
-    "etag": "fake_etag",
-    "placeholder": False,
-}).start()
+@pytest.fixture(autouse=True, scope="session")
+def mock_cloudinary():
+    with mock.patch('cloudinary.uploader.upload', return_value={
+        "public_id": "test_id",
+        "url": "http://example.com/fake.jpg",
+        "secure_url": "https://example.com/fake.jpg",
+        "version": "1234567890",
+        "type": "upload",
+        "resource_type": "image",
+        "signature": "fake_signature",
+        "format": "jpg",
+        "created_at": "2020-01-01T00:00:00Z",
+        "bytes": 12345,
+        "etag": "fake_etag",
+        "placeholder": False,
+    }), \
+    mock.patch('cloudinary.uploader.destroy', return_value={"result": "ok"}), \
+    mock.patch('cloudinary.CloudinaryImage', autospec=True):
 
-mock.patch('cloudinary.uploader.destroy', return_value={"result": "ok"}).start()
+        yield
 
-mock.patch('cloudinary.CloudinaryImage', autospec=True).start()
 # ----- Fixtures -----
 
 @pytest.fixture

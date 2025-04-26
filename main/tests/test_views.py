@@ -2,7 +2,27 @@ import pytest
 from django.urls import reverse
 from main.models import Product, Category
 from django.core.files.uploadedfile import SimpleUploadedFile
+from unittest import mock
 
+# ----- Mocking -----
+mock.patch('cloudinary.uploader.upload', return_value={
+    "public_id": "test_id",
+    "url": "http://example.com/fake.jpg",
+    "secure_url": "https://example.com/fake.jpg",
+    "version": "1234567890",
+    "type": "upload",
+    "resource_type": "image",
+    "signature": "fake_signature",
+    "format": "jpg",
+    "created_at": "2020-01-01T00:00:00Z",
+    "bytes": 12345,
+    "etag": "fake_etag",
+    "placeholder": False,
+}).start()
+
+mock.patch('cloudinary.uploader.destroy', return_value={"result": "ok"}).start()
+
+mock.patch('cloudinary.CloudinaryImage', autospec=True).start()
 # ----- Fixtures -----
 
 @pytest.fixture

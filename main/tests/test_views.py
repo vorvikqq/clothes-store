@@ -2,6 +2,7 @@ import pytest
 from django.urls import reverse
 from main.models import Product, Category
 from django.core.files.uploadedfile import SimpleUploadedFile
+from unittest.mock import patch
 
 # ----- Fixtures -----
 
@@ -16,13 +17,17 @@ def category():
 @pytest.fixture
 def image_file():
     """
-    Returns a simple image as a SimpleUploadedFile object.
+    Creates a small valid GIF image file for testing.
     """
-    return SimpleUploadedFile(
-        name='test_image.jpg',
-        content=b'\x47\x49\x46\x38\x89\x61',  # minimal content for a GIF file
-        content_type='image/jpeg'
+    small_gif = (
+        b'\x47\x49\x46\x38\x39\x61\x01\x00'
+        b'\x01\x00\x80\x00\x00\x00\x00\x00'
+        b'\xff\xff\xff\x21\xf9\x04\x00\x00'
+        b'\x00\x00\x00\x2c\x00\x00\x00\x00'
+        b'\x01\x00\x01\x00\x00\x02\x02\x44'
+        b'\x01\x00\x3b'
     )
+    return SimpleUploadedFile('small.gif', small_gif, content_type='image/gif')
 
 
 @pytest.fixture

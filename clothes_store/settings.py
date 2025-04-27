@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure--kh^v@vxhyo%uha1v9lx4pm-tj!pc71!bxz$5u-lrn9tansd&l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'web']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'web', 'clothes-store-331i.onrender.com']
 
 
 # Application definition
@@ -61,6 +61,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 ROOT_URLCONF = 'clothes_store.urls'
 
 TEMPLATES = [

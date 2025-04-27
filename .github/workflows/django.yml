@@ -58,10 +58,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Check deploy_url
-        run:
-          echo "Deploy URL is set: ${{ secrets.RENDER_DEPLOY_HOOK_URL != '' }}"
       - name: Trigger Render Deploy
         env:
           deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          run: echo "$deploy_url"
         run: curl "$deploy_url"
